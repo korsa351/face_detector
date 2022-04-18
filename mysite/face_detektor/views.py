@@ -13,10 +13,6 @@ FACE_DETECTOR_PATH = "{base_path}/cascades/haarcascade_frontalface_default.xml".
 global out_image
 
 
-# def open_face():
-#     with open('Image/face.png', ) as f:
-#         return f
-
 def generate_random_string(length=5):
     letters = string.ascii_lowercase
     rand_string = ''.join(random.choice(letters) for i in range(length))
@@ -43,11 +39,6 @@ def detect(request):
             image = _grab_image(stream=request.FILES["Image"])
             out_image = x.file
             out_image = Image.open(x.file)
-            # image_test = np.asarray(bytearray(x.read()), dtype=np.uint8)
-            # img = cv2.imdecode(image_test, cv2.IMREAD_COLOR)
-            # image1 = cv2.imread(image_test)
-            # cv2.imshow("image", img)
-            # cv2.waitKey(0)
         # otherwise, assume that a URL was passed in
         else:
             # grab the URL from the request
@@ -61,9 +52,6 @@ def detect(request):
         # convert the image to grayscale, load the face cascade detector,
         # and detect faces in the image
         image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        # test = Image.fromarray(image, 'RGB')
-        # test = Image.fromarray(image)
-        # test.show()
         detector = cv2.CascadeClassifier(FACE_DETECTOR_PATH)
         rects = detector.detectMultiScale(image, scaleFactor=1.1, minNeighbors=5,
                                           minSize=(30, 30), flags=cv2.CASCADE_SCALE_IMAGE)
@@ -75,18 +63,11 @@ def detect(request):
         for i in rects:
             out_image = cv2.rectangle(out_image, i[0:2], i[-2::], (255, 0, 0), thickness=2)
         out_image = Image.fromarray(out_image)
-        # image.save("C:\\Users\\User\\Desktop\\trash\\filename.jpeg")
-        # fs = FileSystemStorage()
-        # foto = fs.save('photo', out_image)
         string = generate_random_string()
         out_image.save(f'media/photo_{string}.png')
         context = {'url': f'/media/photo_{string}.png'}
         return render(request, 'result.html', context=context)
     return render(request, 'upload.html')
-
-
-# def index(request):
-#     return HttpResponse("Hello, world. You're at the polls index.")
 
 
 def _grab_image(path=None, stream=None, url=None):
