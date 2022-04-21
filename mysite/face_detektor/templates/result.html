@@ -23,7 +23,11 @@
 <body class="page">
 <div class="containter">
     <h2>Result</h2>
+    {% if url != False %}
     <img src="{{ url }}" class="img-fluid" alt="Result"/>
+    {% else %}
+    <p>Faces is not detected!</p>
+    {% endif %}
 </div>
 </body>
 </html>

@@ -65,7 +65,10 @@ def detect(request):
         out_image = Image.fromarray(out_image)
         string = generate_random_string()
         out_image.save(f'media/photo_{string}.png')
-        context = {'url': f'/media/photo_{string}.png'}
+        if data["num_faces"] != 0:
+            context = {'url': f'/media/photo_{string}.png'}
+        else:
+            context = {'url': False}
         return render(request, 'result.html', context=context)
     return render(request, 'upload.html')
 
